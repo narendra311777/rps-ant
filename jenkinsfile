@@ -14,15 +14,20 @@ pipeline {
       }
     }
 
-stage('build-image'){
-     app = docker.build("narendra311777/rps-ant")
-     }
-   stage('publish-image'){
-     docker.withRegistry('https://registry.hub.docker.com','docker'){
-     app.push("${env.BUILD_NUMBER}")
-     app.push("latest")
-}
-}
+stage('Building image') {
+      steps{
+        script {
+         // dockerImage = docker.build registry
+         dockerImage = docker.build("narendra311777/mycode")
+        }
+      }
+    }
+  // stage('publish-image'){
+ //    docker.withRegistry('https://registry.hub.docker.com','docker'){
+  //   app.push("${env.BUILD_NUMBER}")
+   ////  app.push("latest")
+//}
+//}
 // Uploading Docker images into AWS ECR
     stage('Pushing to ECR') {
      steps{  
