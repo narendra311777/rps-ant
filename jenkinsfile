@@ -18,7 +18,7 @@ stage('Building image') {
       steps{
         script {
          // dockerImage = docker.build registry
-         dockerImage = docker.build("narendra311777/mycode")
+         dockerImage = docker.build("narendra311777/rps-ant")
         }
       }
     }
