@@ -1,0 +1,35 @@
+
+pipeline {
+  agent any
+  stages {
+    stage('Log Ant version info') {
+      steps {
+        sh 'ant -version'
+      }
+    }
+    stage('GitHub Jenkins Ant Build') {
+      steps {
+        git 'https://github.com/learn-devops-fast/rps-ant.git'
+        sh 'ant clean compile test package war'
+      }
+    }
+
+stage('build-image'){
+     app = docker.build("narendra311777/rps-ant")
+     }
+   stage('publish-image'){
+     docker.withRegistry('https://registry.hub.docker.com','docker'){
+     app.push("${env.BUILD_NUMBER}")
+     app.push("latest")
+}
+}
+// Uploading Docker images into AWS ECR
+    stage('Pushing to ECR') {
+     steps{  
+         script {
+                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
+                sh "docker push 371661025153.dkr.ecr.ap-south-1.amazonaws.com/sample:latest"
+         }
+        }
+      }
+}
